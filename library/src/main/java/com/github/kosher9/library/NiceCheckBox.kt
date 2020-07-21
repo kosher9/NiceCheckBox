@@ -55,8 +55,10 @@ class NiceCheckBox @JvmOverloads constructor(
     private var borderEraser: Paint
     private var borderPaint: Paint
 
+    private var restoreCheckSatate = true
+
     private var backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0x44000000
+        color = Color.parseColor("#08000000")
     }
 
     private var mScale = 1f
@@ -95,6 +97,7 @@ class NiceCheckBox @JvmOverloads constructor(
         } else {
             animateBack()
         }
+        restoreCheckSatate = false
         this.checked = !this.checked
         return super.performClick()
     }
@@ -107,7 +110,15 @@ class NiceCheckBox @JvmOverloads constructor(
         backgroundCanvas.drawCircle(mCenter.x.toFloat(), mCenter.y.toFloat(), mCenter.x.toFloat() - 5, borderEraser)
         canvas?.drawBitmap(borderBitmap, 0f, 0f, null)
         foregroundCanvas.drawCircle(mCenter.x.toFloat(), mCenter.y.toFloat(), mCenter.x.toFloat() - 6, checkPaint)
-        foregroundCanvas.drawCircle(mCenter.x.toFloat(), mCenter.y.toFloat(), mCenter.x.toFloat() * mScale -5, checkEraser)
+        if (checked){
+            if (restoreCheckSatate){
+                foregroundCanvas.drawCircle(mCenter.x.toFloat(), mCenter.y.toFloat(), mCenter.x.toFloat() * 0 -5, checkEraser)
+            } else {
+                foregroundCanvas.drawCircle(mCenter.x.toFloat(), mCenter.y.toFloat(), mCenter.x.toFloat() * mScale -5, checkEraser)
+            }
+        } else{
+            foregroundCanvas.drawCircle(mCenter.x.toFloat(), mCenter.y.toFloat(), mCenter.x.toFloat() * mScale -5, checkEraser)
+        }
         canvas?.drawBitmap(checkBitmap, 0f, 0f, null)
         drawTick(canvas)
     }
@@ -204,7 +215,7 @@ class NiceCheckBox @JvmOverloads constructor(
     override fun onSaveInstanceState(): Parcelable? {
         val bundle = Bundle()
         bundle.putParcelable(KEY_INSTANCE_STATE, super.onSaveInstanceState())
-        bundle.putBoolean(KEY_INSTANCE_STATE, isChecked)
+        bundle.putBoolean(KEY_INSTANCE_STATE, checked)
         return bundle
     }
 
@@ -229,7 +240,8 @@ class NiceCheckBox @JvmOverloads constructor(
     }
 
     override fun setChecked(checked: Boolean) {
-        this.checked = true
+        this.checked = checked
+        restoreCheckSatate = checked
         invalidate()
     }
 

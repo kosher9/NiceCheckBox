@@ -2,6 +2,7 @@ package com.github.kosher9.mycheckbox
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.github.kosher9.library.NiceCheckBox
 
 class MainActivity : AppCompatActivity() {
@@ -10,6 +11,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val s = findViewById<NiceCheckBox>(R.id.nice)
-        val e = s.isChecked
+        s.setOnClickListener {
+            Toast.makeText(this, "${s.isChecked}", Toast.LENGTH_LONG).show()
+        }
     }
 }
