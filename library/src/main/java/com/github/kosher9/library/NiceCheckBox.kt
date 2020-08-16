@@ -166,7 +166,7 @@ class NiceCheckBox @JvmOverloads constructor(
                 result = specSize
             }
             MeasureSpec.UNSPECIFIED -> {
-                return result
+                result = specSize
             }
         }
         return result
